@@ -22,6 +22,7 @@ import com.vaadin.flow.component.splitlayout.SplitLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.ValidationException;
+import com.vaadin.flow.data.provider.CallbackDataProvider;
 import com.vaadin.flow.data.renderer.LitRenderer;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
@@ -93,9 +94,11 @@ public class MasterDetailView extends Div implements BeforeEnterObserver {
 
         grid.addColumn(importantRenderer).setHeader("Important").setAutoWidth(true);
 
-        grid.setItems(
+        CallbackDataProvider<Person, Void> dataProvider = new CallbackDataProvider<>(
                 query -> personService.list(PageRequest.of(query.getPage(), query.getPageSize(), VaadinSpringDataHelpers.toSpringDataSort(query))).stream(),
-                query -> personService.count());
+                query -> personService.count(),
+                Person::getId);
+        grid.setItems(dataProvider);
 
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
 

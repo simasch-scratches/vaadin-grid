@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -29,8 +30,8 @@ public class PersonService {
         repository.deleteById(id);
     }
 
-    public Page<Person> list(Pageable pageable) {
-        return repository.findAll(pageable);
+    public List<Person> list(Pageable pageable) {
+        return repository.findBy(pageable);
     }
 
     public Page<Person> list(Pageable pageable, Specification<Person> filter) {
